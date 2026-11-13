@@ -426,9 +426,10 @@ impl App {
                 let client = self.client().await?;
                 let request = if cmd == "verify_own_device" {
                     let own = client.user_id().ok_or("no user")?.to_owned();
+                    // a fresh keys query: right after login the other sessions may be unknown
                     let identity = client
                         .encryption()
-                        .get_user_identity(&own)
+                        .request_user_identity(&own)
                         .await
                         .map_err(err)?
                         .ok_or("cross-signing is not set up for this account")?;
@@ -454,7 +455,7 @@ impl App {
                 let uid = user_id(v, "user_id")?;
                 let identity = client
                     .encryption()
-                    .get_user_identity(&uid)
+                    .request_user_identity(&uid)
                     .await
                     .map_err(err)?
                     .ok_or("this user has not set up cross-signing")?;

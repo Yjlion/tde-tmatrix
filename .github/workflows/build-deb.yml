@@ -103,6 +103,8 @@ jobs:
           python3 -m venv /opt/synapse
           /opt/synapse/bin/pip install --quiet matrix-synapse
           tools/synapse/start-synapse.sh /tmp/synapse
+          # reuse the crates compiled for the package
+          export CARGO_TARGET_DIR=$(ls -d "$PWD"/obj-*/core/target)
           cd core
           TMATRIX_TEST_HOMESERVER=http://127.0.0.1:8008 \
             cargo test --release --locked -- --nocapture
