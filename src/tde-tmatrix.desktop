@@ -1,0 +1,13 @@
+[Desktop Entry]
+Type=Application
+Name=TMatrix
+GenericName=Matrix Chat
+Comment=Chat on Matrix with end-to-end encryption
+Exec=tde-tmatrix %u
+Icon=tde-tmatrix
+Terminal=false
+Categories=Qt;TDE;Network;InstantMessaging;Chat;
+MimeType=x-scheme-handler/matrix;
+X-DocPath=tde-tmatrix/index.html
+X-DCOP-ServiceType=Unique
+Keywords=matrix;chat;messenger;element;encryption;

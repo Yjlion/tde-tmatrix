@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2fb3a3"/>
+      <stop offset="1" stop-color="#1d6fa8"/>
+    </linearGradient>
+    <linearGradient id="lock" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffd257"/>
+      <stop offset="1" stop-color="#e8a317"/>
+    </linearGradient>
+  </defs>
+  <rect x="6" y="6" width="116" height="116" rx="24" fill="url(#bg)"/>
+  <rect x="6" y="6" width="116" height="58" rx="24" fill="#ffffff" opacity="0.10"/>
+  <!-- speech bubble -->
+  <path d="M30 30 h68 a12 12 0 0 1 12 12 v34 a12 12 0 0 1 -12 12 h-38 l-18 16 v-16 h-12 a12 12 0 0 1 -12 -12 v-34 a12 12 0 0 1 12 -12 z" fill="#ffffff"/>
+  <!-- square brackets with dots: a chat in a room -->
+  <path d="M38 44 h-6 v30 h6" fill="none" stroke="#1d6fa8" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M90 44 h6 v30 h-6" fill="none" stroke="#1d6fa8" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="50" cy="59" r="6" fill="#2fb3a3"/>
+  <circle cx="64" cy="59" r="6" fill="#2fb3a3"/>
+  <circle cx="78" cy="59" r="6" fill="#2fb3a3"/>
+  <!-- padlock: end-to-end encryption -->
+  <path d="M90 92 v-6 a10 10 0 0 1 20 0 v6" fill="none" stroke="#5a4a12" stroke-width="5"/>
+  <rect x="84" y="91" width="32" height="25" rx="5" fill="url(#lock)" stroke="#8a6a10" stroke-width="2"/>
+  <circle cx="100" cy="102" r="3.5" fill="#5a4a12"/>
+  <rect x="98.5" y="103" width="3" height="7" rx="1.5" fill="#5a4a12"/>
+</svg>

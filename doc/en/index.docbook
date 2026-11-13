@@ -1,0 +1,661 @@
+<?xml version="1.0" ?>
+<!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
+  <!ENTITY tmatrix "<application>TMatrix</application>">
+  <!ENTITY kappname "&tmatrix;">
+  <!ENTITY package "tde-tmatrix">
+  <!ENTITY matrix "<application>Matrix</application>">
+  <!ENTITY % addindex "IGNORE">
+  <!ENTITY % English "INCLUDE">
+]>
+
+<book lang="&language;">
+
+<bookinfo>
+<title>The &tmatrix; Handbook</title>
+
+<authorgroup>
+<author>
+<othername>tde-tmatrix contributors</othername>
+</author>
+</authorgroup>
+
+<copyright>
+<year>2026</year>
+<holder>tde-tmatrix contributors</holder>
+</copyright>
+
+<legalnotice>&FDLNotice;</legalnotice>
+
+<date>2026-11-12</date>
+<releaseinfo>0.1.0</releaseinfo>
+
+<abstract>
+<para>
+&tmatrix; is a chat client for &matrix;, the open and decentralised
+network for secure communication, made for the Trinity Desktop
+Environment. It supports direct chats and rooms, end-to-end encryption
+with session verification and key recovery, pictures and files,
+invitations, several accounts and a system tray icon with notifications.
+</para>
+</abstract>
+
+<keywordset>
+<keyword>TDE</keyword>
+<keyword>Trinity</keyword>
+<keyword>Matrix</keyword>
+<keyword>chat</keyword>
+<keyword>instant messaging</keyword>
+<keyword>encryption</keyword>
+<keyword>Element</keyword>
+</keywordset>
+</bookinfo>
+
+<!-- ================================================================== -->
+
+<chapter id="introduction">
+<title>Introduction</title>
+
+<para>
+&matrix; is an open standard for chat. Like e-mail, it is decentralised:
+your account lives on a <emphasis>homeserver</emphasis> (for example
+<literal>matrix.org</literal>, a server of your company or one you run
+yourself), and you can talk with people on any other homeserver. Your
+address, the <emphasis>Matrix ID</emphasis>, looks like
+<literal>@alice:example.org</literal>; rooms have addresses like
+<literal>#trinity:example.org</literal>.
+</para>
+
+<para>
+&tmatrix; lets you use &matrix; from the Trinity desktop. It works with
+every homeserver and with people who use other &matrix; apps such as
+Element, FluffyChat or Nheko.
+</para>
+
+<itemizedlist>
+<listitem><para><emphasis>Direct chats and rooms</emphasis>, grouped into
+invitations, favourites, people, rooms and low priority, with the number of
+unread messages.</para></listitem>
+<listitem><para><emphasis>End-to-end encryption</emphasis>: direct chats
+and private rooms are encrypted so that only their members can read them.
+&tmatrix; verifies sessions by comparing emoji and backs up your message
+keys with a recovery key.</para></listitem>
+<listitem><para>Formatted messages (Markdown), replies, edits, reactions,
+deleting messages, pictures and files.</para></listitem>
+<listitem><para>Creating rooms, the room directory, invitations, members,
+room settings and notification settings per room.</para></listitem>
+<listitem><para>Account management: profile name and picture, sessions,
+password, several accounts.</para></listitem>
+<listitem><para>A system tray icon with the number of unread messages, and
+notifications through the TDE notification system.</para></listitem>
+</itemizedlist>
+
+<screenshot>
+<screeninfo>The main window of &tmatrix;</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="main-window.png" format="PNG"/></imageobject>
+<textobject><phrase>The main window: rooms on the left, an encrypted conversation on the right</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+The &matrix; protocol and the encryption are handled by
+<application>matrix-rust-sdk</application>, the library of the &matrix;
+project that the Element apps also use; its cryptography comes from
+<application>vodozemac</application>. &tmatrix; itself adds the Trinity
+user interface.
+</para>
+</chapter>
+
+<!-- ================================================================== -->
+
+<chapter id="getting-started">
+<title>Getting Started</title>
+
+<sect1 id="account">
+<title>Getting an Account</title>
+
+<para>
+You need a &matrix; account to use &tmatrix;. &tmatrix; does not create
+accounts: register on the web page of a homeserver, for example with
+Element at <ulink url="https://app.element.io">app.element.io</ulink> for
+an account on <literal>matrix.org</literal>, then come back to &tmatrix;.
+Many organisations and communities run their own homeservers; ask them for
+an account.
+</para>
+</sect1>
+
+<sect1 id="login">
+<title>Logging In</title>
+
+<para>
+Start &tmatrix; from the K menu (<menuchoice><guimenu>Internet</guimenu>
+<guimenuitem>TMatrix</guimenuitem></menuchoice>) or with the command
+<command>tde-tmatrix</command>. The first time, the login window
+opens.
+</para>
+
+<screenshot>
+<screeninfo>Logging in</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="login.png" format="PNG"/></imageobject>
+<textobject><phrase>The login window</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<variablelist>
+<varlistentry><term><guilabel>Homeserver</guilabel></term>
+<listitem><para>The server of your account, for example
+<literal>matrix.org</literal>. &tmatrix; looks it up and shows below which
+login methods it offers. If you type a full Matrix ID as user name, the
+server is filled in for you. You can also give the address of the server,
+like <literal>https://matrix.example.org</literal>.</para></listitem></varlistentry>
+<varlistentry><term><guilabel>User name</guilabel> and <guilabel>Password</guilabel></term>
+<listitem><para>Your user name (<literal>alice</literal>) or full Matrix ID
+(<literal>@alice:example.org</literal>), and your password. Press
+<guibutton>Log In</guibutton>.</para></listitem></varlistentry>
+<varlistentry><term><guibutton>Log In in the Web Browser (Single Sign-On)</guibutton></term>
+<listitem><para>Some servers let you log in only through a web page, for
+example with your company account. &tmatrix; opens that page in your web
+browser; after you logged in there, &tmatrix; continues by
+itself.</para></listitem></varlistentry>
+</variablelist>
+
+<para>
+&tmatrix; keeps you logged in. Your login is stored in the TDE Wallet (or,
+if you turned that off, in a file only you can read), and your messages and
+encryption keys are stored encrypted in
+<filename>~/.trinity/share/apps/tde-tmatrix/</filename>.
+</para>
+</sect1>
+
+<sect1 id="first-steps">
+<title>After Logging In</title>
+
+<para>
+If you already use &matrix; on another device, &tmatrix; asks you to
+<link linkend="verification">verify this session</link>. Until you do,
+it cannot read encrypted messages sent before you logged in. If this is
+your first &matrix; app, &tmatrix; suggests to
+<link linkend="recovery">set up recovery</link>.
+</para>
+</sect1>
+</chapter>
+
+<!-- ================================================================== -->
+
+<chapter id="using">
+<title>Chatting</title>
+
+<sect1 id="main-window">
+<title>The Main Window</title>
+
+<para>
+The list on the left shows your rooms and direct chats, newest activity
+first, in these groups:
+</para>
+
+<itemizedlist>
+<listitem><para><guilabel>Invites</guilabel>: rooms and chats you were
+invited to.</para></listitem>
+<listitem><para><guilabel>Favourites</guilabel>: rooms you marked as
+favourite.</para></listitem>
+<listitem><para><guilabel>People</guilabel>: direct chats.</para></listitem>
+<listitem><para><guilabel>Rooms</guilabel>: all other rooms.</para></listitem>
+<listitem><para><guilabel>Low Priority</guilabel>: rooms you moved out of
+the way.</para></listitem>
+</itemizedlist>
+
+<para>
+A blue number shows how many unread messages notify you; it turns red if
+someone mentioned you. Type in the field above the list to filter the
+rooms by name. Right-click a room for more actions. <keycombo action="simul">&Alt;<keycap>Down</keycap></keycombo>
+jumps to the next room with unread messages.
+</para>
+
+<para>
+On the right is the conversation. The header shows the picture, name and
+topic of the room, and a lock if the room is encrypted. Older messages load
+when you scroll to the top.
+</para>
+</sect1>
+
+<sect1 id="writing">
+<title>Writing Messages</title>
+
+<para>
+Type your message in the field at the bottom and press &Enter; to send it.
+<keycombo action="simul">&Shift;&Enter;</keycombo> starts a new line. (You
+can change this in the <link linkend="settings">settings</link> so that
+<keycombo action="simul">&Ctrl;&Enter;</keycombo> sends.)
+</para>
+
+<para>
+Messages are written in <emphasis>Markdown</emphasis>:
+<literal>*italic*</literal>, <literal>**bold**</literal>,
+<literal>`code`</literal>, <literal>&gt; quotes</literal>, lists starting
+with <literal>-</literal> and links like
+<literal>[Trinity](https://www.trinitydesktop.org)</literal>. Two commands
+are understood: <literal>/me waves</literal> sends an action, and
+<literal>/plain</literal> sends the text without formatting.
+</para>
+
+<para>
+To send a picture or file, press the paper clip button, use
+<menuchoice><guimenu>Room</guimenu><guimenuitem>Send File</guimenuitem></menuchoice>
+(<keycombo action="simul">&Ctrl;<keycap>U</keycap></keycombo>), or drag
+files from &konqueror; into the message field. Files are encrypted in
+encrypted rooms.
+</para>
+</sect1>
+
+<sect1 id="message-actions">
+<title>Replying, Editing, Reacting and Deleting</title>
+
+<para>
+Click the time of a message (or right-click it) for its menu:
+</para>
+
+<variablelist>
+<varlistentry><term><guimenuitem>Reply</guimenuitem></term>
+<listitem><para>Quotes the message above yours. A bar above the message
+field shows what you reply to; &Esc; cancels.</para></listitem></varlistentry>
+<varlistentry><term><guimenuitem>React</guimenuitem></term>
+<listitem><para>Adds an emoji reaction. Click a reaction under a message to
+add or remove yours.</para></listitem></varlistentry>
+<varlistentry><term><guimenuitem>Edit</guimenuitem></term>
+<listitem><para>Changes your own message. Pressing <keycap>Up</keycap> in an empty message
+field edits your last message.</para></listitem></varlistentry>
+<varlistentry><term><guimenuitem>Delete</guimenuitem></term>
+<listitem><para>Removes the message for everyone. Moderators can delete
+the messages of others.</para></listitem></varlistentry>
+<varlistentry><term><guimenuitem>Open</guimenuitem>, <guimenuitem>Save As</guimenuitem></term>
+<listitem><para>Opens a picture or file with the application TDE uses for
+it, or saves it. Clicking a picture opens it.</para></listitem></varlistentry>
+<varlistentry><term><guimenuitem>Copy Text</guimenuitem>, <guimenuitem>Copy Link</guimenuitem></term>
+<listitem><para>Copies the text, or a <literal>matrix.to</literal> link to
+the message.</para></listitem></varlistentry>
+</variablelist>
+
+<para>
+Click the name of a person to send them a direct message, to verify them or
+to copy their Matrix ID.
+</para>
+</sect1>
+
+<sect1 id="starting-chats">
+<title>Starting Chats and Joining Rooms</title>
+
+<variablelist>
+<varlistentry><term><menuchoice><guimenu>Matrix</guimenu><guimenuitem>Start Chat</guimenuitem></menuchoice>
+(<keycombo action="simul">&Ctrl;<keycap>N</keycap></keycombo>)</term>
+<listitem><para>Find a person by name or Matrix ID and start an encrypted
+direct chat. If you already have one with them, it opens.</para></listitem></varlistentry>
+<varlistentry><term><menuchoice><guimenu>Matrix</guimenu><guimenuitem>Create Room</guimenuitem></menuchoice></term>
+<listitem><para>Creates a room with a name and topic. A
+<emphasis>public</emphasis> room can be found in the room directory and
+joined by anyone, and can have an address
+(<literal>#name:yourserver</literal>). Private rooms are encrypted by
+default; you can invite people right away.</para></listitem></varlistentry>
+<varlistentry><term><menuchoice><guimenu>Matrix</guimenu><guimenuitem>Explore Rooms</guimenuitem></menuchoice>
+(<keycombo action="simul">&Ctrl;<keycap>J</keycap></keycombo>)</term>
+<listitem><para>Lists the public rooms of your homeserver, or of another
+server if you enter its name. Type to search, select a room and press
+<guibutton>Join</guibutton>. To join a room by its address, type the
+address (<literal>#trinity:matrix.org</literal>) and press
+<guibutton>Join</guibutton>.</para></listitem></varlistentry>
+</variablelist>
+
+<screenshot>
+<screeninfo>The room directory</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="directory.png" format="PNG"/></imageobject>
+<textobject><phrase>Explore Rooms: the public rooms of a server</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+Invitations appear under <guilabel>Invites</guilabel>. Select one to see
+who invited you, then press <guibutton>Accept</guibutton> or
+<guibutton>Decline</guibutton>.
+</para>
+</sect1>
+
+<sect1 id="room-settings">
+<title>Room Settings</title>
+
+<para>
+<menuchoice><guimenu>Room</guimenu><guimenuitem>Room Settings</guimenuitem></menuchoice>
+(<keycombo action="simul">&Ctrl;<keycap>I</keycap></keycombo>, or the
+button in the room header) has four pages. What you can change depends on
+your permissions in the room.
+</para>
+
+<variablelist>
+<varlistentry><term><guilabel>General</guilabel></term>
+<listitem><para>The picture, name and topic, and the address and ID of the
+room.</para></listitem></varlistentry>
+<varlistentry><term><guilabel>Members</guilabel></term>
+<listitem><para>Who is in the room and who is an administrator or
+moderator. Invite people, and remove or ban members.</para></listitem></varlistentry>
+<varlistentry><term><guilabel>Notifications</guilabel></term>
+<listitem><para>Whether this room notifies you about all messages, only
+mentions, or nothing. By default, direct chats notify you about every
+message and rooms only about mentions.</para></listitem></varlistentry>
+<varlistentry><term><guilabel>Security</guilabel></term>
+<listitem><para>Whether the room is end-to-end encrypted, and a button to
+turn encryption on. It cannot be turned off again.</para></listitem></varlistentry>
+</variablelist>
+
+<screenshot>
+<screeninfo>Room settings</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="room-settings.png" format="PNG"/></imageobject>
+<textobject><phrase>The members of a room</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+To leave a room, use <menuchoice><guimenu>Room</guimenu><guimenuitem>Leave
+Room</guimenuitem></menuchoice> or the context menu of the room list.
+</para>
+</sect1>
+</chapter>
+
+<!-- ================================================================== -->
+
+<chapter id="encryption">
+<title>Encryption</title>
+
+<para>
+In encrypted rooms, and all direct chats started with &tmatrix;, messages
+and files are encrypted on your computer and can only be decrypted by the
+devices of the members. Not even the homeservers can read them.
+</para>
+
+<para>
+Each place where you are logged in is a <emphasis>session</emphasis> (also
+called a device) with its own keys. Two things keep this secure and
+convenient:
+</para>
+
+<sect1 id="verification">
+<title>Verifying Sessions and People</title>
+
+<para>
+Verification proves that a session really belongs to who it claims to be.
+&tmatrix; compares seven emoji: both devices show them, and if they are
+the same on both, nobody is listening in between.
+</para>
+
+<itemizedlist>
+<listitem><para><emphasis>Your own new session</emphasis>: use
+<menuchoice><guimenu>Account</guimenu><guimenuitem>Verify This Session</guimenuitem></menuchoice>
+and accept the request in another app where you are already logged in
+(for example Element on your phone). After verification this session
+receives the keys of your older messages.</para></listitem>
+<listitem><para><emphasis>Other people</emphasis>: click their name in a
+conversation and choose <guimenuitem>Verify</guimenuitem>. Do it when you
+can talk to them in person or on a call, so you know you compare with the
+right person.</para></listitem>
+<listitem><para>When someone else starts a verification, &tmatrix; shows
+a notification and the verification window. Press
+<guibutton>Accept</guibutton>.</para></listitem>
+</itemizedlist>
+
+<screenshot>
+<screeninfo>Verifying a session</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="verification.png" format="PNG"/></imageobject>
+<textobject><phrase>Comparing emoji to verify a session</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+Press <guibutton>They Match</guibutton> only if the same emoji appear in the
+same order on both devices, otherwise press <guibutton>They Don't
+Match</guibutton>. A red warning sign next to a message means it comes from
+a session its sender has not verified.
+</para>
+</sect1>
+
+<sect1 id="recovery">
+<title>Recovery</title>
+
+<para>
+Your message keys are stored on your devices. If you lose all of them, you
+can no longer read your encrypted history, unless you set up
+<emphasis>recovery</emphasis>: &tmatrix; then backs up your keys on your
+homeserver, encrypted with a <emphasis>recovery key</emphasis> that only
+you have.
+</para>
+
+<para>
+Open <menuchoice><guimenu>Account</guimenu><guimenuitem>Encryption and Recovery</guimenuitem></menuchoice>
+and press <guibutton>Set Up Recovery</guibutton>. Write the key down or
+save it in a password manager: anyone with the key can read your messages,
+and &tmatrix; does not keep a copy.
+</para>
+
+<screenshot>
+<screeninfo>Encryption and recovery</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="encryption.png" format="PNG"/></imageobject>
+<textobject><phrase>The encryption status of the account</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<para>
+On a new device, press <guibutton>Enter Recovery Key</guibutton> instead of
+verifying with another session: the session is verified and downloads your
+keys. <guibutton>Reset Recovery Key</guibutton> makes a new key if you
+lost the old one while you still have a verified session.
+</para>
+</sect1>
+</chapter>
+
+<!-- ================================================================== -->
+
+<chapter id="account-management">
+<title>Your Account</title>
+
+<para>
+<menuchoice><guimenu>Account</guimenu><guimenuitem>Manage Account</guimenuitem></menuchoice>
+has these pages:
+</para>
+
+<variablelist>
+<varlistentry><term><guilabel>Profile</guilabel></term>
+<listitem><para>Your display name and picture, which others see in rooms,
+and your Matrix ID, homeserver and session ID.</para></listitem></varlistentry>
+<varlistentry><term><guilabel>Sessions</guilabel></term>
+<listitem><para>Everywhere you are logged in, when each session was last
+used and whether it is verified. You can rename a session, verify it, or
+sign it out (for example a lost phone); signing out asks for your
+password.</para></listitem></varlistentry>
+<varlistentry><term><guilabel>Encryption</guilabel></term>
+<listitem><para>See <xref linkend="encryption"/>.</para></listitem></varlistentry>
+<varlistentry><term><guilabel>Password</guilabel></term>
+<listitem><para>Changes your password. (Accounts that log in with single
+sign-on change their password on the web page of their
+provider.)</para></listitem></varlistentry>
+</variablelist>
+
+<screenshot>
+<screeninfo>Sessions</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="sessions.png" format="PNG"/></imageobject>
+<textobject><phrase>The sessions of the account</phrase></textobject>
+</mediaobject>
+</screenshot>
+
+<sect1 id="accounts">
+<title>Several Accounts</title>
+
+<para>
+<menuchoice><guimenu>Account</guimenu><guimenuitem>Add Account</guimenuitem></menuchoice>
+logs in with another account, and
+<menuchoice><guimenu>Account</guimenu><guimenuitem>Switch Account</guimenuitem></menuchoice>
+changes between them. One account is connected at a time.
+</para>
+
+<para>
+<menuchoice><guimenu>Account</guimenu><guimenuitem>Log Out</guimenuitem></menuchoice>
+ends the session and deletes its data from this computer. Without recovery
+or another verified session, you then lose access to your encrypted
+messages.
+</para>
+</sect1>
+</chapter>
+
+<!-- ================================================================== -->
+
+<chapter id="tray">
+<title>The System Tray and Notifications</title>
+
+<para>
+While &tmatrix; runs, its icon is in the system tray of the panel, with the
+number of unread messages. Closing the window keeps &tmatrix; running in
+the tray; use <menuchoice><guimenu>Matrix</guimenu><guimenuitem>Quit</guimenuitem></menuchoice>
+to end it.
+</para>
+
+<itemizedlist>
+<listitem><para>A left click shows or hides the window.</para></listitem>
+<listitem><para>A middle click opens the next room with unread
+messages.</para></listitem>
+<listitem><para>The right-click menu has <guimenuitem>Show Next Unread
+Room</guimenuitem> and <guimenuitem>Quit</guimenuitem>.</para></listitem>
+</itemizedlist>
+
+<para>
+New messages that notify you (all messages in direct chats, mentions of
+you in rooms, as set per room) show a popup through the TDE notification
+system, as do invitations and verification requests. Choose sounds and
+other actions for them with
+<menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure Notifications</guimenuitem></menuchoice>.
+</para>
+</chapter>
+
+<!-- ================================================================== -->
+
+<chapter id="settings">
+<title>Settings</title>
+
+<para>
+<menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure TMatrix</guimenuitem></menuchoice>:
+</para>
+
+<variablelist>
+<varlistentry><term><guilabel>Messages</guilabel></term>
+<listitem><para>Whether &Enter; sends, whether others see when you type,
+whether joins, leaves and name changes are shown, and whether pictures are
+shown in the conversation.</para></listitem></varlistentry>
+<varlistentry><term><guilabel>Notifications</guilabel></term>
+<listitem><para>The tray icon, starting &tmatrix; in the tray when you log
+in to TDE, notification popups and whether they show the text of the
+message.</para></listitem></varlistentry>
+<varlistentry><term><guilabel>Privacy</guilabel></term>
+<listitem><para>Whether your login is kept in the TDE
+Wallet.</para></listitem></varlistentry>
+</variablelist>
+
+<screenshot>
+<screeninfo>Settings</screeninfo>
+<mediaobject>
+<imageobject><imagedata fileref="settings.png" format="PNG"/></imageobject>
+<textobject><phrase>The settings of TMatrix</phrase></textobject>
+</mediaobject>
+</screenshot>
+</chapter>
+
+<!-- ================================================================== -->
+
+<chapter id="commands">
+<title>Command Line</title>
+
+<variablelist>
+<varlistentry><term><command>tde-tmatrix</command></term>
+<listitem><para>Starts &tmatrix;, or shows the window if it already
+runs.</para></listitem></varlistentry>
+<varlistentry><term><command>tde-tmatrix --minimized</command></term>
+<listitem><para>Starts in the system tray (used when starting with
+TDE).</para></listitem></varlistentry>
+<varlistentry><term><command>tde-tmatrix --room <replaceable>!id:server</replaceable></command></term>
+<listitem><para>Opens a room you are in.</para></listitem></varlistentry>
+</variablelist>
+
+<para>
+Set the environment variable <envar>TMATRIX_LOG</envar> to
+<literal>info</literal> or <literal>debug</literal> to see what the &matrix;
+engine does on the standard error output.
+</para>
+</chapter>
+
+<!-- ================================================================== -->
+
+<chapter id="troubleshooting">
+<title>Questions and Answers</title>
+
+<qandaset>
+<qandaentry>
+<question><para>Messages show <quote>Unable to decrypt this message</quote>.</para></question>
+<answer><para>This session does not have the keys of these messages. They
+were sent before you logged in here, or by a session that did not share the
+keys with you. Verify this session with another of your sessions, or enter
+your recovery key (<xref linkend="recovery"/>); the messages are then
+decrypted. If the sender's device was offline, the keys may arrive
+later.</para></answer>
+</qandaentry>
+<qandaentry>
+<question><para>The login fails with <quote>the user name or password is wrong</quote>.</para></question>
+<answer><para>Check the homeserver: your account only exists on the server
+where you created it. If the server offers only single sign-on, use the
+button for the web browser.</para></answer>
+</qandaentry>
+<qandaentry>
+<question><para>The tray icon is grey.</para></question>
+<answer><para>&tmatrix; is not connected to the homeserver. It retries by
+itself; the status bar of the window shows the reason.</para></answer>
+</qandaentry>
+<qandaentry>
+<question><para>Can I make voice or video calls?</para></question>
+<answer><para>No, &tmatrix; does not support calls, threads or spaces yet.
+Messages in threads appear in the conversation with a note.</para></answer>
+</qandaentry>
+<qandaentry>
+<question><para>Where does &tmatrix; keep its data?</para></question>
+<answer><para>Settings in <filename>~/.trinity/share/config/tde-tmatrixrc</filename>,
+messages, keys and downloaded pictures (encrypted) in
+<filename>~/.trinity/share/apps/tde-tmatrix/accounts/</filename>, and your
+login in the TDE Wallet.</para></answer>
+</qandaentry>
+</qandaset>
+</chapter>
+
+<!-- ================================================================== -->
+
+<chapter id="credits">
+<title>Credits and License</title>
+
+<para>
+&tmatrix; copyright 2026 tde-tmatrix contributors. It was written largely
+with the help of an AI coding assistant and is provided as is, without
+warranty. It is not affiliated with or endorsed by The Matrix.org
+Foundation or Element.
+</para>
+
+<para>
+&tmatrix; uses <ulink url="https://github.com/matrix-org/matrix-rust-sdk">matrix-rust-sdk</ulink>
+and <ulink url="https://github.com/matrix-org/vodozemac">vodozemac</ulink> by
+The Matrix.org Foundation (Apache License 2.0).
+</para>
+
+<para>
+Documentation copyright 2026 tde-tmatrix contributors.
+</para>
+
+&underFDL;
+&underGPL;
+</chapter>
+
+</book>
