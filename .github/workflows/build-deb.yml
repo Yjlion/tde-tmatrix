@@ -1,0 +1,134 @@
+name: Build Debian packages
+
+on:
+  push:
+    branches: [ main ]
+    tags: [ 'v*' ]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Debian ${{ matrix.suite }}
+    runs-on: ubuntu-latest
+    container: debian:${{ matrix.suite }}
+    strategy:
+      fail-fast: false
+      matrix:
+        suite: [ bookworm, trixie ]
+    env:
+      DEBIAN_FRONTEND: noninteractive
+      TDE_MIRROR: http://mirror.ppa.trinitydesktop.org/trinity/deb/trinity-r14.1.x
+      DEBFULLNAME: GitHub Actions
+      DEBEMAIL: actions@users.noreply.github.com
+      # matrix-rust-sdk needs a newer Rust than Debian ships
+      RUSTUP_HOME: /opt/rust
+      CARGO_HOME: /opt/cargo
+
+    steps:
+      - name: Install base tools
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends ca-certificates curl gnupg git
+
+      - name: Add the Trinity Desktop repository
+        run: |
+          curl -fsSL --retry 5 -o /tmp/trinity-keyring.deb \
+            https://mirror.ppa.trinitydesktop.org/trinity/deb/trinity-keyring.deb
+          apt-get install -y /tmp/trinity-keyring.deb
+          echo "deb ${TDE_MIRROR} ${{ matrix.suite }} main deps" \
+            > /etc/apt/sources.list.d/trinity.list
+          apt-get update
+
+      - name: Check out the source
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          apt-get install -y --no-install-recommends build-essential devscripts equivs lintian
+          mk-build-deps --install --remove \
+            --tool 'apt-get -y --no-install-recommends' debian/control
+          rm -f tde-tmatrix-build-deps_*
+
+      - name: Install Rust
+        run: |
+          curl -fsSL --retry 5 https://sh.rustup.rs | sh -s -- -y --profile minimal --default-toolchain stable
+          echo "/opt/cargo/bin" >> "$GITHUB_PATH"
+
+      - name: Cache the Rust crates
+        uses: actions/cache@v4
+        with:
+          path: |
+            /opt/cargo/registry
+            /opt/cargo/git
+          key: cargo-${{ matrix.suite }}-${{ hashFiles('core/Cargo.lock') }}
+          restore-keys: cargo-${{ matrix.suite }}-
+
+      - name: Build the package
+        run: |
+          cargo --version
+          # add the suite to the version so packages for both suites can be
+          # published side by side
+          VERSION=$(dpkg-parsechangelog -S Version)
+          dch --newversion "${VERSION}+${{ matrix.suite }}" --distribution ${{ matrix.suite }} \
+              --force-distribution "Build for Debian ${{ matrix.suite }}."
+          dpkg-buildpackage -us -uc -b
+          mkdir -p artifacts
+          mv ../*.deb ../*.buildinfo ../*.changes artifacts/
+
+      - name: Run lintian
+        continue-on-error: true
+        run: lintian --info --display-info artifacts/*.changes
+
+      - name: Test installation
+        run: |
+          apt-get install -y --no-install-recommends ./artifacts/tde-tmatrix-trinity_*.deb
+          test -x /opt/trinity/bin/tde-tmatrix
+          test -f /opt/trinity/share/applications/tde/tde-tmatrix.desktop
+          test -f /opt/trinity/share/apps/tde-tmatrix/tde-tmatrixui.rc
+          test -f /opt/trinity/share/apps/tde-tmatrix/eventsrc
+          test -f /opt/trinity/share/autostart/tde-tmatrix-autostart.desktop
+          test -f /opt/trinity/share/doc/tde/HTML/en/tde-tmatrix/index.cache.bz2
+          test -f /opt/trinity/share/doc/tde/HTML/en/tde-tmatrix/main-window.png
+          test -f /opt/trinity/share/man/man1/tde-tmatrix.1
+          test -f /opt/trinity/share/icons/hicolor/128x128/apps/tde-tmatrix.png
+          /opt/trinity/bin/tde-tmatrix --version
+
+      - name: Test against a Synapse homeserver
+        run: |
+          apt-get install -y --no-install-recommends python3-venv
+          python3 -m venv /opt/synapse
+          /opt/synapse/bin/pip install --quiet matrix-synapse
+          tools/synapse/start-synapse.sh /tmp/synapse
+          cd core
+          TMATRIX_TEST_HOMESERVER=http://127.0.0.1:8008 \
+            cargo test --release --locked -- --nocapture
+
+      - name: Upload packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: tde-tmatrix-${{ matrix.suite }}
+          path: artifacts/*.deb
+          if-no-files-found: error
+
+  release:
+    name: Publish release
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: packages
+          merge-multiple: true
+
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: packages/*.deb
+          generate_release_notes: true

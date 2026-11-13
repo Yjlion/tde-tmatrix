@@ -1,0 +1,7 @@
+tde-tmatrix (0.1.0) unstable; urgency=medium
+
+  * First release: a Matrix chat client for Trinity with end-to-end
+    encryption (matrix-rust-sdk), verification, recovery, rooms, invites,
+    media, several accounts, tray icon and notifications.
+
+ -- Yjlion <yjlion@gmail.com>  Thu, 12 Nov 2026 12:00:00 +0000

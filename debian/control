@@ -1,0 +1,41 @@
+Source: tde-tmatrix
+Section: tde
+Priority: optional
+Maintainer: Yjlion <yjlion@gmail.com>
+Build-Depends: debhelper-compat (= 13),
+               cmake,
+               tde-cmake,
+               tdelibs14-trinity-dev,
+               libtqt3-mt-dev,
+               libtqtinterface-dev,
+               pkgconf | pkg-config
+Standards-Version: 4.6.2
+Homepage: https://github.com/Yjlion/tde-tmatrix
+Vcs-Browser: https://github.com/Yjlion/tde-tmatrix
+Vcs-Git: https://github.com/Yjlion/tde-tmatrix.git
+Rules-Requires-Root: no
+
+Package: tde-tmatrix-trinity
+Architecture: any
+Depends: ${shlibs:Depends},
+         ${misc:Depends}
+Recommends: khelpcenter-trinity,
+            kicker-trinity,
+            fonts-symbola
+Description: Matrix chat client with end-to-end encryption [Trinity]
+ TMatrix is a chat client for Matrix, the open and decentralised network
+ for secure communication, made for the Trinity Desktop Environment. It
+ works with any homeserver and with people who use other Matrix apps.
+ .
+ It supports direct chats and rooms, invitations, the public room
+ directory, Markdown, replies, edits, reactions, pictures and files, room
+ settings and members, several accounts, and a system tray icon with
+ unread counts and notifications.
+ .
+ Direct chats and private rooms are end-to-end encrypted. Sessions are
+ verified by comparing emoji and message keys are backed up with a
+ recovery key. The protocol and the encryption are implemented by
+ matrix-rust-sdk and vodozemac, which are built into the program.
+ .
+ Building the package needs Rust 1.96 or later (rustup) and network access
+ to crates.io.
