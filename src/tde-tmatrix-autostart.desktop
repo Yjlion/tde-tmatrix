@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=TMatrix
+Comment=Matrix chat in the system tray
+Exec=tde-tmatrix --minimized
+Icon=tde-tmatrix
+Terminal=false
+X-TDE-autostart-condition=tde-tmatrixrc:General:Autostart:false
+X-TDE-autostart-after=panel
+NoDisplay=true

@@ -1,0 +1,43 @@
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
+<kpartgui name="tde-tmatrix" version="1">
+  <MenuBar>
+    <Menu name="file" noMerge="1"><text>&amp;Matrix</text>
+      <Action name="start_chat"/>
+      <Action name="new_room"/>
+      <Action name="explore"/>
+      <Separator/>
+      <Action name="file_quit"/>
+    </Menu>
+    <Menu name="room"><text>&amp;Room</text>
+      <Action name="room_settings"/>
+      <Action name="invite"/>
+      <Action name="upload"/>
+      <Separator/>
+      <Action name="favourite"/>
+      <Action name="mark_read"/>
+      <Action name="next_unread"/>
+      <Separator/>
+      <Action name="leave"/>
+    </Menu>
+    <Menu name="account"><text>&amp;Account</text>
+      <Action name="manage_account"/>
+      <Action name="encryption"/>
+      <Action name="verify_session"/>
+      <Separator/>
+      <Action name="switch_account"/>
+      <Action name="add_account"/>
+      <Separator/>
+      <Action name="logout"/>
+    </Menu>
+  </MenuBar>
+  <ToolBar name="mainToolBar" noMerge="1"><text>Main Toolbar</text>
+    <Action name="start_chat"/>
+    <Action name="new_room"/>
+    <Action name="explore"/>
+    <Separator/>
+    <Action name="upload"/>
+    <Action name="room_settings"/>
+    <Separator/>
+    <Action name="manage_account"/>
+  </ToolBar>
+</kpartgui>

@@ -1,0 +1,6 @@
+Source of the application icon in ../../icons. After changing it, regenerate:
+
+  gzip -9 -n -c tde-tmatrix.svg > ../../icons/hisc-app-tde-tmatrix.svgz
+  for s in 16 22 32 48 64 128; do
+    rsvg-convert -w $s -h $s tde-tmatrix.svg -o ../../icons/hi$s-app-tde-tmatrix.png
+  done

@@ -1,0 +1,24 @@
+[!Global!]
+IconName=tde-tmatrix
+Comment=TMatrix
+
+[message]
+Name=New message
+Comment=A new message in a direct chat or a room that notifies you
+default_presentation=16
+
+[mention]
+Name=Mention
+Comment=Someone mentioned you or a keyword
+default_presentation=17
+default_sound=KDE_Beep_Connect.wav
+
+[invite]
+Name=Invitation
+Comment=You were invited to a room or direct chat
+default_presentation=16
+
+[verification]
+Name=Verification request
+Comment=Another session or user asks to verify
+default_presentation=16
