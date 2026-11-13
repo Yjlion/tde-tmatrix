@@ -1,0 +1,98 @@
+.\" Manual page for tde-tmatrix
+.\" Copyright (C) 2026 tde-tmatrix contributors
+.\" This page is distributed under the terms of the GNU GPL version 2 or later.
+.TH TDE\-TMATRIX 1 "November 2026" "tde-tmatrix 0.1.0" "Trinity Desktop Environment"
+.SH NAME
+tde\-tmatrix \- Matrix chat client for the Trinity Desktop Environment
+.SH SYNOPSIS
+.B tde\-tmatrix
+.RB [ \-\-minimized ]
+.RB [ \-\-room
+.IR room\-id ]
+.RI [ "generic TDE and TQt options" ]
+.SH DESCRIPTION
+.B tde\-tmatrix
+(TMatrix) is a chat client for Matrix, the open and decentralised network
+for secure communication. It works with any Matrix homeserver and with
+people who use other Matrix applications.
+.PP
+It supports direct chats and rooms, invitations, the public room
+directory, formatted messages (Markdown), replies, edits, reactions,
+deleting messages, pictures and files, room settings and members,
+notification settings per room, several accounts, and a system tray icon
+with the number of unread messages and notifications.
+.PP
+Direct chats and private rooms are end\-to\-end encrypted. Sessions and
+people are verified by comparing emoji, and message keys are backed up
+with a recovery key. The Matrix protocol and the encryption are
+implemented by matrix\-rust\-sdk and vodozemac.
+.PP
+Only one instance runs per user; starting it again shows the window of the
+running instance. Closing the window keeps TMatrix running in the system
+tray if the tray icon is enabled.
+.SH OPTIONS
+.TP
+.B \-\-minimized
+Start in the system tray without showing the window. Used by the autostart
+entry when "Start TMatrix in the tray when I log in" is enabled.
+.TP
+.BI \-\-room " room\-id"
+Open the room with this ID (for example
+.IR !abcdef:example.org ).
+.TP
+.B \-\-help
+Show the options, including the generic TDE and TQt options.
+.TP
+.B \-\-version
+Show the version.
+.SH KEYS
+.TP
+.B Enter
+Send the message (Shift+Enter starts a new line; configurable).
+.TP
+.B Up
+In an empty message field: edit your last message.
+.TP
+.B Escape
+Cancel a reply or edit.
+.TP
+.B Alt+Down
+Go to the next room with unread messages.
+.TP
+.B Ctrl+N, Ctrl+Shift+N, Ctrl+J
+Start a chat, create a room, explore rooms.
+.TP
+.B Ctrl+U
+Send a file.
+.SH ENVIRONMENT
+.TP
+.B TMATRIX_LOG
+Log level of the Matrix engine on standard error (error, warn, info, debug,
+trace, or a filter like
+.IR matrix_sdk=debug ).
+The default is warn.
+.SH FILES
+.TP
+.I ~/.trinity/share/config/tde\-tmatrixrc
+Settings and the list of accounts.
+.TP
+.I ~/.trinity/share/apps/tde\-tmatrix/accounts/
+The state, message and key stores of each account, encrypted with a
+passphrase kept with the login, and the cache of downloaded media.
+.TP
+.I ~/.trinity/share/apps/tde\-tmatrix/sessions/
+Logins, only if the TDE Wallet is not used.
+.SH NOTES
+TMatrix does not create accounts; register on the web page of a homeserver
+first. Voice and video calls, threads and spaces are not supported.
+.PP
+TMatrix was written largely with the help of an AI coding assistant and
+comes without any warranty. It is not affiliated with The Matrix.org
+Foundation.
+.SH SEE ALSO
+The TMatrix handbook in KHelpCenter
+.RI ( help:/tde\-tmatrix ).
+.PP
+https://github.com/Yjlion/tde-tmatrix
+.SH AUTHORS
+tde\-tmatrix contributors.
